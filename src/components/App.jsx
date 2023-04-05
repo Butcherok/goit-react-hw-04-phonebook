@@ -22,20 +22,23 @@ export default function App() {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const contactChange = ({ value }) => {
-    setContacts(value);
-    setFilter(value);
+  const contactChange = ({ target: { name, value } }) => {
+    if (name === 'filter') {
+      setFilter(value);
+    }
   };
 
   const addContact = contact => {
     setContacts(contacts => [...contacts, contact]);
   };
 
-  const getFilterContact = () => {
-    return contacts.filter(contacts =>
-      contacts.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
+  const getFilterContact = () =>
+    contacts.filter(contacts =>
+      contacts.name
+        .toLowerCase()
+        .includes(
+          filter.toLowerCase())
+        );
 
   const deleteContacts = id => {
     setContacts(contacts.filter(contact => contact.id !== id));
