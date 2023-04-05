@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { ContactName, ContactNumber } from './contactItem.styled';
 
-export const ContactItem = ({ name, number }) => {
+export default function ContactItem({ name, number }) {
   return (
     <>
       <ContactName>{name}: </ContactName>

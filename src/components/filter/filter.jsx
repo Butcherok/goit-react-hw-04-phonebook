@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { FilterInput, FilterLabel, Filters } from './filter.styled';
 
-export const Filter = ({ contactChange, filter }) => {
+export default function Filter({ contactChange, filter })  {
   return (
     <Filters>
       <FilterLabel htmlFor="filter">Find contacts by name</FilterLabel>

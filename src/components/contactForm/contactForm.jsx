@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import {
@@ -10,24 +10,21 @@ import {
   NumberLabel,
 } from './contactForm.styled';
 
-export class ContactForm extends Component {
-  static propTypes = {
-    addContact: PropTypes.func.isRequired,
-    contacts: PropTypes.array.isRequired,
+export default function ContactForm({ addContact, contacts }) {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const contactChange = ({ target: { name, value } }) => {
+    if (name === 'name') {
+      setName(value);
+    }
+    if (name === 'number') {
+      setNumber(value);
+    }
   };
 
-  state = {
-    name: '',
-    number: '',
-  };
-
-  contactChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-
-  contactSubmit = e => {
+  const contactSubmit = e => {
     e.preventDefault();
-    const { addContact, contacts } = this.props;
 
     const searchTwins = contacts.some(
       contact =>
@@ -36,57 +33,58 @@ export class ContactForm extends Component {
 
     if (searchTwins) {
       alert(`${e.target.name.value.trim()} is already in contacts`);
-      this.reset();
+      reset();
       return;
     }
 
     addContact({
       id: nanoid(),
-      name: this.state.name.trim(),
-      number: this.state.number.trim(),
+      name: name.trim(),
+      number: number.trim(),
     });
 
-    this.reset();
+    reset();
   };
 
-  reset = () => {
-    this.setState({ name: '', number: '' });
+  const reset = () => {
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    return (
-      <NewContactForm onSubmit={this.contactSubmit}>
-        <NameLabel htmlFor="nameContact">Name</NameLabel>
-        <NameInput
-          type="text"
-          name="name"
-          id="nameContact"
-          placeholder="Jack Jonson"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          value={this.state.name}
-          onChange={this.contactChange}
-        />
-        <NumberLabel htmlFor="numberContact">Number</NumberLabel>
-        <NumberInput
-          type="tel"
-          name="number"
-          id="numberContact"
-          placeholder="123-45-67"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          value={this.state.number}
-          onChange={this.contactChange}
-        />
-        <AddContactBtn
-          type="submit"
-          disabled={!this.state.name || !this.state.number}
-        >
-          Add contact
-        </AddContactBtn>
-      </NewContactForm>
-    );
-  }
+  return (
+    <NewContactForm onSubmit={contactSubmit}>
+      <NameLabel htmlFor="nameContact">Name</NameLabel>
+      <NameInput
+        type="text"
+        name="name"
+        id="nameContact"
+        placeholder="Jack Jonson"
+        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+        value={name}
+        onChange={contactChange}
+      />
+      <NumberLabel htmlFor="numberContact">Number</NumberLabel>
+      <NumberInput
+        type="tel"
+        name="number"
+        id="numberContact"
+        placeholder="123-45-67"
+        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        required
+        value={number}
+        onChange={contactChange}
+      />
+      <AddContactBtn type="submit" disabled={!name || !number}>
+        Add contact
+      </AddContactBtn>
+    </NewContactForm>
+  );
 }
+
+ContactForm.propTypes = {
+  addContact: PropTypes.func.isRequired,
+  contacts: PropTypes.array.isRequired,
+};

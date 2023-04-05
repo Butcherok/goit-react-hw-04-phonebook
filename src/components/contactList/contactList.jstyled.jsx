@@ -22,10 +22,10 @@ export const ContactsItem = styled.li`
   background-color: white;
   border: 1px solid lightblue;
   border-radius: 5px;
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     background-color: lightblue;
   }
-  &:nth-child(2n-1) {
+  &:nth-of-type(2n-1) {
     background-color: #cbf0fd;
   }
 `;
